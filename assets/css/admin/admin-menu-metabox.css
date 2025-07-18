@@ -1,0 +1,97 @@
+#multi-menu-settings-content {
+    padding-top: 0 !important;
+
+    .inside {
+        margin-top: 0 !important;
+    }
+}
+
+.multi-menu-metabox {
+    fieldset {
+        border: 1px solid #dcdcde;
+        padding: 10px;
+        margin-top: 15px;
+        margin-bottom: 0;
+
+        &:first-child {
+            margin-top: 0;
+        }
+
+        legend {
+            padding-left: 5px;
+            padding-right: 5px;
+            font-weight: bold;
+        }
+
+        .fields {
+            margin-top: 0;
+        }
+
+        .description {
+            margin-bottom: 15px;
+        }
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 2px;
+            display: block;
+            margin-top: 0;
+        }
+
+        select {
+            width: 100%;
+            max-width: 100%;
+            display: block;
+        }
+
+        &.checkbox-container {
+            label {
+                display: inline-block;
+                margin-left: 2px;
+                cursor: pointer;
+            }
+        }
+
+        &.input-container {
+            input {
+                width: 100%;
+            }
+        }
+    }
+
+    .save-button-container {
+        margin-top: 15px;
+    }
+
+    .menu-save-alert {
+        margin-top: 15px;
+        margin-bottom: 15px;
+        border: 1px solid #0a8f06;
+        background-color: #f2fff4;
+        padding: 15px;
+    }
+
+    .plugin-advertisement {
+        border: 1px solid #dcdcde;
+        margin-top: 30px;
+        padding: 10px;
+
+        .header {
+            font-size: 0.85rem;
+            margin: 0;
+            margin-bottom: 10px;
+        }
+
+        p {
+            margin-top: 0;
+        }
+    }
+}
