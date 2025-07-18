@@ -3,8 +3,8 @@
 namespace MultiMenu;
 
 /*
-Plugin Name: Multi Menu Pluging
-Description: This is a plugin that allows you to easily replace your theme's default menu with a mega menu, fullscreen menu or slideout menu.
+Plugin Name: Multi Menu Plugin
+Description: This is a plugin that allows you to easily replace your theme's default menu with a mega menu.
 Version: 1.0.0
 Author: Chandana Sapumal
 Author URI: https://chan000x.github.io/
@@ -190,7 +190,7 @@ class MultiMenu {
                 $multi_menu_load_theme_specific_css         = get_term_meta($menu_id, 'multimenu_load_theme_specific_css', true);
                 $multi_menu_additional_classes              = get_term_meta($menu_id, 'multimenu_additional_classes', true);
 
-                if($multimenu_menu_style != false && $multimenu_menu_style != "") {
+                if($multimenu_menu_style == "mega") {
 
                     $menu_params = [];  // Any optional parameters we want to pass to our nav walker
                     $menu_params["invert_toggle"] = boolval($multi_menu_invert_toggle_color);
@@ -213,170 +213,58 @@ class MultiMenu {
                     if(isset($current_theme->template) && $current_theme->template != "") {
                         $current_theme_name = $current_theme->template;
                     }
-                    
 
-                    if($multimenu_menu_style == "fullscreen") {
+                    require_once(plugin_dir_path(__FILE__) . "/mega-menu/MegaMenuNavWalker.php");
 
-                        require_once(plugin_dir_path(__FILE__) . "/fullscreen-menu/FullscreenMenuNavWalker.php");
+                    $args['walker'] = new MegaMenuNavWalker($multimenu_menu_css, $menu_params);
 
-                        $args['walker'] = new FullscreenMenuNavWalker($multimenu_menu_css, $menu_params);
+                    // Load the appropriate CSS for this menu
 
-                        // Load the appropriate CSS for this menu
+                    if($multimenu_menu_css != "") {
 
-                        if($multimenu_menu_css != "") {
+                        // If there's a value, we're always loading the core styles
+                        wp_enqueue_style('multi-menu-mega-core', plugin_dir_url(__FILE__) . 'mega-menu/css/mega-core.css', [], null);
 
-                            // If there's a value, we're always loading the core styles
-                            wp_enqueue_style('multi-menu-fullscreen-core', plugin_dir_url(__FILE__) . 'fullscreen-menu/css/fullscreen-core.css', [], null);
-
-                            if($multimenu_menu_css == "light") {
-                                wp_enqueue_style('multi-menu-fullscreen-light', plugin_dir_url(__FILE__) . 'fullscreen-menu/css/fullscreen-light.css', [], null);
-                            }
-                            elseif($multimenu_menu_css == "dark") {
-                                wp_enqueue_style('multi-menu-fullscreen-dark', plugin_dir_url(__FILE__) . 'fullscreen-menu/css/fullscreen-dark.css', [], null);
-                            }
-
+                        if($multimenu_menu_css == "light") {
+                            wp_enqueue_style('multi-menu-mega-light', plugin_dir_url(__FILE__) . 'mega-menu/css/mega-light.css', [], null);
                         }
-
-                        if(boolval($multi_menu_load_theme_specific_css) === true && preg_match('/^[a-zA-Z0-9_-]+$/', $current_theme_name)) {
-
-                            // Check if we have any theme specific CSS to load
-                            
-                            /*
-                                Common popular theme names include:
-                                astra
-                                blocksy
-                                generatepress
-                                kadence
-                                neve
-                            */
-
-                            $filepath = 'fullscreen-menu/css/theme-overrides/'. basename($current_theme_name) . '.css';
-
-                            if(file_exists(plugin_dir_path(__FILE__) . $filepath)) {
-                                wp_enqueue_style('multi-menu-overrides-' . $current_theme_name, plugin_dir_url(__FILE__) . $filepath, [], null);
-                            }
-
+                        elseif($multimenu_menu_css == "dark") {
+                            wp_enqueue_style('multi-menu-mega-dark', plugin_dir_url(__FILE__) . 'mega-menu/css/mega-dark.css', [], null);
                         }
-
-                        // Load the appropriate JS for this menu
-
-                        wp_enqueue_script(
-                            'multi-menu-fullscreen-js',
-                            plugin_dir_url(__FILE__) . 'fullscreen-menu/js/fullscreen-menu.js',
-                            array('jquery'),
-                            '1.0',
-                            true
-                        );
 
                     }
-                    elseif($multimenu_menu_style == "mega") {
 
-                        require_once(plugin_dir_path(__FILE__) . "/mega-menu/MegaMenuNavWalker.php");
+                    if(boolval($multi_menu_load_theme_specific_css) === true && preg_match('/^[a-zA-Z0-9_-]+$/', $current_theme_name)) {
 
-                        $args['walker'] = new MegaMenuNavWalker($multimenu_menu_css, $menu_params);
+                        // Check if we have any theme specific CSS to load
+                        
+                        /*
+                            Common popular theme names include:
+                            astra
+                            blocksy
+                            generatepress
+                            kadence
+                            neve
+                        */
 
-                        // Load the appropriate CSS for this menu
+                        $filepath = 'mega-menu/css/theme-overrides/'. basename($current_theme_name) . '.css';
 
-                        if($multimenu_menu_css != "") {
-
-                            // If there's a value, we're always loading the core styles
-                            wp_enqueue_style('multi-menu-mega-core', plugin_dir_url(__FILE__) . 'mega-menu/css/mega-core.css', [], null);
-
-                            if($multimenu_menu_css == "light") {
-                                wp_enqueue_style('multi-menu-mega-light', plugin_dir_url(__FILE__) . 'mega-menu/css/mega-light.css', [], null);
-                            }
-                            elseif($multimenu_menu_css == "dark") {
-                                wp_enqueue_style('multi-menu-mega-dark', plugin_dir_url(__FILE__) . 'mega-menu/css/mega-dark.css', [], null);
-                            }
-
+                        if(file_exists(plugin_dir_path(__FILE__) . $filepath)) {
+                            wp_enqueue_style('multi-menu-overrides-' . $current_theme_name, plugin_dir_url(__FILE__) . $filepath, [], null);
                         }
-
-                        if(boolval($multi_menu_load_theme_specific_css) === true && preg_match('/^[a-zA-Z0-9_-]+$/', $current_theme_name)) {
-
-                            // Check if we have any theme specific CSS to load
-                            
-                            /*
-                                Common popular theme names include:
-                                astra
-                                blocksy
-                                generatepress
-                                kadence
-                                neve
-                            */
-
-                            $filepath = 'mega-menu/css/theme-overrides/'. basename($current_theme_name) . '.css';
-
-                            if(file_exists(plugin_dir_path(__FILE__) . $filepath)) {
-                                wp_enqueue_style('multi-menu-overrides-' . $current_theme_name, plugin_dir_url(__FILE__) . $filepath, [], null);
-                            }
-
-                        }
-
-                        // Load the appropriate JS for this menu
-
-                        wp_enqueue_script(
-                            'multi-menu-mega-js',
-                            plugin_dir_url(__FILE__) . 'mega-menu/js/mega-menu.js',
-                            array('jquery'),
-                            '1.0',
-                            true
-                        );
 
                     }
-                    elseif($multimenu_menu_style == "slideout") {
 
-                        require_once(plugin_dir_path(__FILE__) . "/slideout-menu/SlideoutMenuNavWalker.php");
+                    // Load the appropriate JS for this menu
 
-                        $args['walker'] = new SlideoutMenuNavWalker($multimenu_menu_css, $menu_params);
+                    wp_enqueue_script(
+                        'multi-menu-mega-js',
+                        plugin_dir_url(__FILE__) . 'mega-menu/js/mega-menu.js',
+                        array('jquery'),
+                        '1.0',
+                        true
+                    );
 
-                        // Load the appropriate CSS for this menu
-
-                        if($multimenu_menu_css != "") {
-
-                            // If there's a value, we're always loading the core styles
-                            wp_enqueue_style('multi-menu-slideout-core', plugin_dir_url(__FILE__) . 'slideout-menu/css/slideout-core.css', [], null);
-
-                            if($multimenu_menu_css == "light") {
-                                wp_enqueue_style('multi-menu-slideout-light', plugin_dir_url(__FILE__) . 'slideout-menu/css/slideout-light.css', [], null);
-                            }
-                            elseif($multimenu_menu_css == "dark") {
-                                wp_enqueue_style('multi-menu-slideout-dark', plugin_dir_url(__FILE__) . 'slideout-menu/css/slideout-dark.css', [], null);
-                            }
-
-                        }
-
-                        if(boolval($multi_menu_load_theme_specific_css) === true && preg_match('/^[a-zA-Z0-9_-]+$/', $current_theme_name)) {
-
-                            // Check if we have any theme specific CSS to load
-                            
-                            /*
-                                Common popular theme names include:
-                                astra
-                                blocksy
-                                generatepress
-                                kadence
-                                neve
-                            */
-
-                            $filepath = 'slideout-menu/css/theme-overrides/'. basename($current_theme_name) . '.css';
-
-                            if(file_exists(plugin_dir_path(__FILE__) . $filepath)) {
-                                wp_enqueue_style('multi-menu-overrides-' . $current_theme_name, plugin_dir_url(__FILE__) . $filepath, [], null);
-                            }
-
-                        }
-
-                        // Load the appropriate JS for this menu
-
-                        wp_enqueue_script(
-                            'multi-menu-slideout-js',
-                            plugin_dir_url(__FILE__) . 'slideout-menu/js/slideout-menu.js',
-                            array('jquery'),
-                            '1.0',
-                            true
-                        );
-
-                    }
                 }
             }
         }
@@ -389,9 +277,3 @@ class MultiMenu {
 
 // Initialize the plugin
 $multi_menu = new MultiMenu();
-
-if(file_exists(plugin_dir_path(__FILE__) . "/updater/MultiMenuUpdater.php")) {
-    require_once(plugin_dir_path(__FILE__) . "/updater/MultiMenuUpdater.php");
-}
-
-

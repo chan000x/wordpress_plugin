@@ -12,9 +12,7 @@
                 </label>
                 <select id="menu_style" name="menu_style" class="js-multi-menu-select">
                     <option value=""<?php if(!isset($multi_menu_style) || $multi_menu_style == ""){ echo ' selected="selected"'; } ?>><?php _e('Disabled'); ?></option>
-                    <option value="fullscreen"<?php if(isset($multi_menu_style) && $multi_menu_style == "fullscreen"){ echo ' selected="selected"'; } ?>><?php _e('Fullscreen Menu'); ?></option>
                     <option value="mega"<?php if(isset($multi_menu_style) && $multi_menu_style == "mega"){ echo ' selected="selected"'; } ?>><?php _e('Mega Menu'); ?></option>
-                    <option value="slideout"<?php if(isset($multi_menu_style) && $multi_menu_style == "slideout"){ echo ' selected="selected"'; } ?>><?php _e('Slideout Menu'); ?></option>
                 </select>
             </div>
         </div>
